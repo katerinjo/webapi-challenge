@@ -4,17 +4,30 @@ const db = require('../data/helpers/projectModel');
 const router = express.Router();
 
 router.post('/', validateProject, (req, res) => {
-  db.insert(req.body);
-  res.status(201).json({ accepted: req.body });
+  db.insert(req.body)
+    .then(dbRes => {
+      console.log(dbRes);
+      res.status(201).json({ accepted: req.body });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.get('/:id', (req, res) => {
-  const project = db.get(req.params.id);
-  if (project.name) {
-    res.status(200).json({ project });
-  } else {
-    res.status(404).json({ message: "no project with that id"});
-  }
+  db.get(req.params.id)
+    .then(project => {
+      if (project) {
+        res.status(200).json({ project });
+      } else {
+        res.status(404).json({ message: "no project with that id"});
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.get('/', (req, res) => {
@@ -22,7 +35,10 @@ router.get('/', (req, res) => {
     .then(allProjects => {
       res.status(200).json({ projects: allProjects });
     })
-    .catch(console.log);
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.put('/:id', (req, res) => {
