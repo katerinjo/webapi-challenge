@@ -46,7 +46,18 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-
+  db.remove(req.params.id)
+    .then(n => {
+      if (n === 0) {
+        res.status(404).json({ message: "nothing deleted" });
+      } else {
+        res.status(200).json({ message: "deletion successful" });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 function validateAction(req, res, next) {
