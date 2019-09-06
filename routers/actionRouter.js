@@ -16,7 +16,18 @@ router.post('/', validateAction, (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-
+  db.get(req.params.id)
+    .then(action => {
+      if (action) {
+        res.status(200).json({ action });
+      } else {
+        res.status(404).json({ message: "no action with that id"});
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.put('/:id', (req, res) => {
