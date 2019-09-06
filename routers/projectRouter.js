@@ -11,6 +11,11 @@ router.get('/:id', (req, res) => {
 
 });
 
+router.get('/', (req, res) => {
+  const allProjects = db.get();
+  res.status(200).json({ projects: allProjects });
+});
+
 router.put('/:id', (req, res) => {
 
 });
