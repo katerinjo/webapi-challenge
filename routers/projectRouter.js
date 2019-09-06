@@ -9,12 +9,20 @@ router.post('/', validateProject, (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-
+  const project = db.get(req.params.id);
+  if (project.name) {
+    res.status(200).json({ project });
+  } else {
+    res.status(404).json({ message: "no project with that id"});
+  }
 });
 
 router.get('/', (req, res) => {
-  const allProjects = db.get();
-  res.status(200).json({ projects: allProjects });
+  db.get()
+    .then(allProjects => {
+      res.status(200).json({ projects: allProjects });
+    })
+    .catch(console.log);
 });
 
 router.put('/:id', (req, res) => {
