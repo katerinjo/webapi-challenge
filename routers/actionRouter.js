@@ -31,7 +31,18 @@ router.get('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-
+  db.update(req.params.id, req.body)
+    .then(updated => {
+      if (updated) {
+        res.status(202).json({ updated });
+      } else {
+        res.status(404).json({ message: "no action with that id" });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.delete('/:id', (req, res) => {
