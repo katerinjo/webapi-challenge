@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+`express()` is a server and `express.Router()` is a router, the latter being basically the same but with the ability to branch out indefinitely. The resulting tree has the server at the root and routers all the way out from there.
+
 - [ ] Describe Middleware?
+
+Middleware does processing between the normal functioning of a thing. In the case of Express, this means inserting a chain of specific functions that mutate the `req` and `res` objects along the way.
 
 - [ ] Describe a Resource?
 
+A resource is a "thing" that a database keeps track of, which generally is made up of various pieces of information applying to whatever in the world it represents.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+The status codes are the standard way to respond to requests in a semantic way. They are hard to remember, but pretty universal.
+
 - [ ] How can we partition our application into sub-applications?
+
+You can create a router and then use it on a server, or another router, via `use`.
 
 ## Project Setup
 
