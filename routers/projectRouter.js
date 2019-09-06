@@ -9,10 +9,7 @@ router.post('/', validateProject, (req, res) => {
       console.log(dbRes);
       res.status(201).json({ accepted: req.body });
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: "internal error" });
-    });
+    .catch(dbErr);
 });
 
 router.get('/:id', (req, res) => {
@@ -24,10 +21,7 @@ router.get('/:id', (req, res) => {
         res.status(404).json({ message: "no project with that id"});
       }
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: "internal error" });
-    });
+    .catch(dbErr);
 });
 
 router.get('/', (req, res) => {
@@ -35,14 +29,12 @@ router.get('/', (req, res) => {
     .then(allProjects => {
       res.status(200).json({ projects: allProjects });
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: "internal error" });
-    });
+    .catch(dbErr);
 });
 
 router.put('/:id', (req, res) => {
-
+  db.update(req.params.id, req.body)
+    .then()
 });
 
 router.delete('/:id', (req, res) => {
@@ -66,5 +58,10 @@ function validateProject(req, res, next) {
     next();
   }
 };
+
+function dbErr(err) {
+  console.log(err);
+  this.res.status(500).json({ message: "internal error" });
+}
 
 module.exports = router;
