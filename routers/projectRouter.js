@@ -34,7 +34,11 @@ router.get('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   db.update(req.params.id, req.body)
-    .then()
+    .then(dbRes => {
+      console.log(dbRes);
+      res.status(202).json({ message: "updated"});
+    })
+    .catch(dbErr);
 });
 
 router.delete('/:id', (req, res) => {
