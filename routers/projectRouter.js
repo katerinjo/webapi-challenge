@@ -9,7 +9,10 @@ router.post('/', validateProject, (req, res) => {
       console.log(dbRes);
       res.status(201).json({ accepted: req.body });
     })
-    .catch(dbErr);
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.get('/:id', (req, res) => {
@@ -21,7 +24,10 @@ router.get('/:id', (req, res) => {
         res.status(404).json({ message: "no project with that id"});
       }
     })
-    .catch(dbErr);
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.get('/', (req, res) => {
@@ -29,20 +35,41 @@ router.get('/', (req, res) => {
     .then(allProjects => {
       res.status(200).json({ projects: allProjects });
     })
-    .catch(dbErr);
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.put('/:id', (req, res) => {
   db.update(req.params.id, req.body)
-    .then(dbRes => {
-      console.log(dbRes);
-      res.status(202).json({ message: "updated"});
+    .then(updatedProj => {
+      if (updatedProj) {
+        res.status(202).json({ updated: updatedProj });
+      } else {
+        res.status(404).json({ message: "no project with that id" });
+      }
+      
     })
-    .catch(dbErr);
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.delete('/:id', (req, res) => {
-
+  db.remove(req.params.id)
+    .then(n => {
+      if (n === 0) {
+        res.status(404).json({ message: "nothing deleted" });
+      } else {
+        res.status(200).json({ message: "deletion successful" });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 router.get('/:id/actions', (req, res) => {
@@ -62,10 +89,5 @@ function validateProject(req, res, next) {
     next();
   }
 };
-
-function dbErr(err) {
-  console.log(err);
-  this.res.status(500).json({ message: "internal error" });
-}
 
 module.exports = router;
