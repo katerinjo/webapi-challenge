@@ -73,7 +73,14 @@ router.delete('/:id', (req, res) => {
 });
 
 router.get('/:id/actions', (req, res) => {
-
+  db.getProjectActions(req.params.id)
+    .then(actions => {
+      res.status(200).json({ actions });
+    })
+    .catch(err => {
+      console.log(err);
+      this.res.status(500).json({ message: "internal error" });
+    });
 });
 
 
