@@ -4,7 +4,8 @@ const db = require('../data/helpers/projectModel');
 const router = express.Router();
 
 router.post('/', validateProject, (req, res) => {
-
+  db.insert(req.body);
+  res.status(201).json({ accepted: req.body });
 });
 
 router.get('/:id', (req, res) => {
